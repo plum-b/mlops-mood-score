@@ -1,3 +1,17 @@
-key: value
+COLUMNS:
+  User_ID: object
+  Age: int64
+  Gender: object
+  Technology_Usage_Hours: float64
+  Social_Media_Usage_Hours: float64
+  Gaming_Hours: float64
+  Screen_Time_Hours: float64
+  Mental_Health_Status: object
+  Stress_Level: object
+  Sleep_Hours: float64
+  Physical_Activity_Hours: float64
+  Support_Systems_Access: object
+  Work_Environment_Impact: object
+  Online_Support_Usage: object
 
 
