@@ -1,0 +1,22 @@
+[2025-08-03 05:03:27,461: INFO: main: >>>>>> stage Data Ingestion stage started <<<<<<]
+[2025-08-03 05:03:27,462: INFO: common: yaml file: config/config.yaml loaded successfully]
+[2025-08-03 05:03:27,462: INFO: common: yaml file: params.yaml loaded successfully]
+[2025-08-03 05:03:27,462: INFO: common: yaml file: schema.yaml loaded successfully]
+[2025-08-03 05:03:27,463: INFO: common: created directory at: artifacts]
+[2025-08-03 05:03:27,463: INFO: common: created directory at: artifacts/data_ingestion]
+[2025-08-03 05:03:28,039: INFO: data_ingestion: Downloaded to: /home/afifn/.cache/kagglehub/datasets/waqi786/mental-health-and-technology-usage-dataset/versions/1]
+[2025-08-03 05:03:28,072: INFO: data_ingestion: Converted mental_health_and_technology_usage_2024.csv to mental_health_data.json]
+[2025-08-03 05:03:28,073: INFO: main: >>>>>> stage Data Ingestion stage completed <<<<<<
+
+x==========x]
+[2025-08-03 05:03:42,413: INFO: main: >>>>>> stage Data Ingestion stage started <<<<<<]
+[2025-08-03 05:03:42,414: INFO: common: yaml file: config/config.yaml loaded successfully]
+[2025-08-03 05:03:42,414: INFO: common: yaml file: params.yaml loaded successfully]
+[2025-08-03 05:03:42,414: INFO: common: yaml file: schema.yaml loaded successfully]
+[2025-08-03 05:03:42,414: INFO: common: created directory at: artifacts]
+[2025-08-03 05:03:42,414: INFO: common: created directory at: artifacts/data_ingestion]
+[2025-08-03 05:03:42,969: INFO: data_ingestion: Downloaded to: /home/afifn/.cache/kagglehub/datasets/waqi786/mental-health-and-technology-usage-dataset/versions/1]
+[2025-08-03 05:03:43,005: INFO: data_ingestion: Converted mental_health_and_technology_usage_2024.csv to mental_health_data.json]
+[2025-08-03 05:03:43,005: INFO: main: >>>>>> stage Data Ingestion stage completed <<<<<<
+
+x==========x]
