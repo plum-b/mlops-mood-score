@@ -10,3 +10,11 @@ data_validation:
   unzip_dir: artifacts/data_ingestion
   STATUS_FILE: artifacts/data_validation/status.txt
   ALL_REQUIRED_FILES: ["mental_health_and_technology_usage_2024.csv"]
+
+data_transformation:
+  root_dir: artifacts/data_transformation
+  data_path: artifacts/data_ingestion
+  transformed_data_path: artifacts/data_transformation
+  target_columns: ["Mental_Health_Status", "Stress_Level"]
+  categorical_columns: ["Gender", "Support_Systems_Access", "Technology_Usage_Frequency", "Social_Media_Usage", "Sleep_Quality", "Exercise_Frequency", "Diet_Quality", "Work_Life_Balance", "Financial_Stress", "Relationship_Status", "Education_Level", "Employment_Status", "Living_Situation", "Access_to_Mental_Health_Services", "Previous_Mental_Health_Diagnosis", "Family_History_of_Mental_Health_Issues", "Substance_Use", "Coping_Mechanisms", "Social_Support_Network", "Life_Satisfaction", "Future_Outlook"]
+  drop_columns: ["User_ID"]

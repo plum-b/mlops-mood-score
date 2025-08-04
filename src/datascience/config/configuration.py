@@ -1,7 +1,8 @@
+from pathlib import Path
 from src.datascience.constants import *
 from src.datascience.utils.common import read_yaml, create_directories
 
-from src.datascience.entity.config_entity import (DataIngestionConfig, DataValidationConfig)
+from src.datascience.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig)
 
 class ConfigurationManager:
     def __init__(
@@ -37,4 +38,17 @@ class ConfigurationManager:
             unzip_dir=config.unzip_dir,
             STATUS_FILE=Path(config.STATUS_FILE),
             ALL_REQUIRED_FILES=config.ALL_REQUIRED_FILES,
+        )
+
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        config = self.config.data_transformation
+        create_directories([config.root_dir, config.transformed_data_path])
+
+        return DataTransformationConfig(
+            root_dir=Path(config.root_dir),
+            data_path=Path(config.data_path),
+            transformed_data_path=Path(config.transformed_data_path),
+            target_columns=config.target_columns,
+            categorical_columns=config.categorical_columns,
+            drop_columns=config.drop_columns,
         )

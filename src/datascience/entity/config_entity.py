@@ -13,3 +13,12 @@ class DataValidationConfig:
     unzip_dir: Path
     STATUS_FILE: Path
     ALL_REQUIRED_FILES: list
+
+@dataclass
+class DataTransformationConfig:
+    root_dir: Path
+    data_path: Path  # path to the input data from data ingestion
+    transformed_data_path: Path  # path to save transformed data
+    target_columns: list  # columns to use as targets (Mental_Health_Status, Stress_Level)
+    categorical_columns: list  # columns to encode
+    drop_columns: list  # columns to drop if not useful
