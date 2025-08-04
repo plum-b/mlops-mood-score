@@ -6,13 +6,20 @@ The Data Transformation component is responsible for preprocessing and transform
 
 ## Features
 
-### 1. Categorical Variable Encoding
-- Uses `LabelEncoder` from scikit-learn to encode categorical variables
+### 1. Automatic String Column Encoding
+- **Automatically detects and encodes ALL string/categorical columns** in the dataset
+- Uses `LabelEncoder` from scikit-learn for consistent encoding
 - Handles missing values by filling with 'Unknown'
 - Stores label encoders for later use in inference
-- Encoded columns are saved with `_encoded` suffix
+- Encoded columns are saved with `_encoded` suffix (e.g., `Support_Systems_Access_encoded`)
 
-### 2. Custom Mood Score Generation
+### 2. Lookup Table Generation
+- Creates comprehensive lookup tables in `artifacts/lookups/`
+- Saves both JSON and CSV formats for each encoded column
+- Provides bidirectional mapping (original → encoded, encoded → original)
+- Enables easy reverse mapping for model interpretation
+
+### 3. Custom Mood Score Generation
 - Creates a composite `Mood_Score` based on weighted factors:
   - Sleep Quality (15%)
   - Exercise Frequency (10%)
@@ -23,19 +30,24 @@ The Data Transformation component is responsible for preprocessing and transform
   - Future Outlook (15%)
 - Score is normalized to 0-100 range
 
-### 3. Column Management
-- Drops unnecessary columns (e.g., User_ID)
+### 4. Column Management
+- Drops unnecessary columns (e.g., User_ID, Technology_Usage_Hours)
 - Validates target columns exist (Mental_Health_Status, Stress_Level)
 - Preserves original columns alongside encoded versions
 
-### 4. Data Persistence
+### 5. Data Persistence
 - Saves transformed data as both CSV and JSON formats
 - Stores label encoder mappings for reproducibility
 - All outputs saved to `artifacts/data_transformation/`
+- Lookup tables saved to `artifacts/lookups/`
 
-### 5. Directory Management
+### 6. Directory Management
 - Automatically creates all necessary directories as part of the process
 - Ensures output directories exist before saving files
+
+### 7. Physical Activity Capping
+- Caps `Physical_Activity_Hours` to maximum of 6 hours
+- Prevents unrealistic values from affecting the model
 
 ## File Structure
 
@@ -71,6 +83,8 @@ data_transformation:
   drop_columns: ["User_ID"]
 ```
 
+**Note**: No need to specify categorical columns - all string columns are automatically detected and encoded.
+
 ## Usage
 
 ### Running the Full Pipeline
@@ -96,11 +110,31 @@ transformed_data = transformer.transform_data()
 
 ## Output Files
 
-After transformation, the following files are created in `artifacts/data_transformation/`:
+After transformation, the following files are created:
 
+### In `artifacts/data_transformation/`:
 1. `transformed_data.csv` - Transformed dataset in CSV format
 2. `transformed_data.json` - Transformed dataset in JSON format
 3. `label_encoders.json` - Mapping of original categories to encoded values
+
+### In `artifacts/lookups/`:
+1. `column_encodings.json` - Comprehensive lookup table for all encoded columns
+2. `{column_name}_mapping.csv` - Individual CSV mapping files for each encoded column
+
+## Lookup Table Structure
+
+The lookup tables provide bidirectional mapping:
+
+```json
+{
+  "Support_Systems_Access": {
+    "original_values": ["Yes", "No", "Unknown"],
+    "encoded_values": [0, 1, 2],
+    "mapping": {"Yes": 0, "No": 1, "Unknown": 2},
+    "reverse_mapping": {0: "Yes", 1: "No", 2: "Unknown"}
+  }
+}
+```
 
 ## Target Variables
 
@@ -143,6 +177,8 @@ mlops-mood-score/
 ├── src/datascience/          # Main source code
 ├── config/                   # Configuration files
 ├── artifacts/               # Generated artifacts
+│   ├── data_transformation/ # Transformed data
+│   └── lookups/            # Lookup tables
 ├── documents/               # Documentation
 ├── tests/                   # Test files
 ├── research/                # Research notebooks

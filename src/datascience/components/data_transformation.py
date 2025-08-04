@@ -19,7 +19,8 @@ class DataTransformation:
         """Create all necessary directories for the transformation process"""
         directories_to_create = [
             self.config.root_dir,
-            self.config.transformed_data_path
+            self.config.transformed_data_path,
+            Path("artifacts/lookups")  # Add lookups directory
         ]
         
         for directory in directories_to_create:
@@ -38,11 +39,15 @@ class DataTransformation:
         logger.info(f"Loaded data with shape: {df.shape}")
         return df
 
-    def encode_categorical_columns(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Encode categorical variables using LabelEncoder"""
-        logger.info("Starting categorical column encoding...")
+    def encode_all_string_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Encode all string/categorical columns in the dataset"""
+        logger.info("Starting encoding of all string columns...")
         
-        for column in self.config.categorical_columns:
+        # Get all columns that are object (string) type
+        string_columns = df.select_dtypes(include=['object']).columns.tolist()
+        logger.info(f"Found {len(string_columns)} string columns to encode: {string_columns}")
+        
+        for column in string_columns:
             if column in df.columns:
                 # Initialize label encoder for this column
                 le = LabelEncoder()
@@ -59,6 +64,20 @@ class DataTransformation:
                 logger.info(f"Encoded column: {column} -> {column}_encoded")
             else:
                 logger.warning(f"Column {column} not found in dataset")
+        
+        return df
+
+    def cap_physical_activity(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Cap physical activity to maximum of 6"""
+        logger.info("Capping physical activity to maximum of 6...")
+        
+        if 'Physical_Activity_Hours' in df.columns:
+            original_max = df['Physical_Activity_Hours'].max()
+            df['Physical_Activity_Hours'] = df['Physical_Activity_Hours'].clip(upper=6)
+            new_max = df['Physical_Activity_Hours'].max()
+            logger.info(f"Capped Physical_Activity_Hours from {original_max} to {new_max}")
+        else:
+            logger.warning("Physical_Activity_Hours column not found")
         
         return df
 
@@ -100,17 +119,20 @@ class DataTransformation:
         """Drop columns that are not useful for modeling"""
         logger.info("Dropping unnecessary columns...")
         
-        columns_to_drop = []
-        for column in self.config.drop_columns:
+        # Add Technology_Usage_Hours to the drop list
+        columns_to_drop = self.config.drop_columns + ["Technology_Usage_Hours"]
+        
+        dropped_columns = []
+        for column in columns_to_drop:
             if column in df.columns:
-                columns_to_drop.append(column)
+                dropped_columns.append(column)
                 logger.info(f"Dropping column: {column}")
             else:
                 logger.warning(f"Column {column} not found in dataset")
         
-        if columns_to_drop:
-            df = df.drop(columns=columns_to_drop)
-            logger.info(f"Dropped {len(columns_to_drop)} columns")
+        if dropped_columns:
+            df = df.drop(columns=dropped_columns)
+            logger.info(f"Dropped {len(dropped_columns)} columns: {dropped_columns}")
         
         return df
 
@@ -129,6 +151,41 @@ class DataTransformation:
             logger.warning(f"Missing target columns: {missing_targets}")
         
         return df
+
+    def save_lookup_tables(self):
+        """Save lookup tables for all encoded columns"""
+        logger.info("Saving lookup tables...")
+        
+        lookups_dir = Path("artifacts/lookups")
+        lookups_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create a comprehensive lookup table
+        lookup_data = {}
+        
+        for column, le in self.label_encoders.items():
+            lookup_data[column] = {
+                'original_values': le.classes_.tolist(),
+                'encoded_values': list(range(len(le.classes_))),
+                'mapping': dict(zip(le.classes_, range(len(le.classes_)))),
+                'reverse_mapping': dict(zip(range(len(le.classes_)), le.classes_))
+            }
+        
+        # Save as JSON
+        import json
+        lookup_file = lookups_dir / "column_encodings.json"
+        with open(lookup_file, 'w') as f:
+            json.dump(lookup_data, f, indent=2)
+        logger.info(f"Saved lookup table: {lookup_file}")
+        
+        # Save individual CSV files for each column
+        for column, le in self.label_encoders.items():
+            mapping_df = pd.DataFrame({
+                'original_value': le.classes_,
+                'encoded_value': range(len(le.classes_))
+            })
+            csv_file = lookups_dir / f"{column}_mapping.csv"
+            mapping_df.to_csv(csv_file, index=False)
+            logger.info(f"Saved {column} mapping: {csv_file}")
 
     def save_transformed_data(self, df: pd.DataFrame):
         """Save the transformed dataset"""
@@ -160,6 +217,9 @@ class DataTransformation:
         with open(encoders_path, 'w') as f:
             json.dump(encoders_data, f, indent=2)
         logger.info(f"Saved label encoders: {encoders_path}")
+        
+        # Save lookup tables
+        self.save_lookup_tables()
 
     def transform_data(self):
         """Main method to perform all data transformation steps"""
@@ -168,8 +228,11 @@ class DataTransformation:
         # Load data
         df = self.load_data()
         
-        # Encode categorical columns
-        df = self.encode_categorical_columns(df)
+        # Encode all string columns
+        df = self.encode_all_string_columns(df)
+        
+        # Cap physical activity
+        df = self.cap_physical_activity(df)
         
         # Create mood score
         df = self.create_mood_score(df)
