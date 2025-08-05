@@ -1,8 +1,8 @@
 import pandas as pd
 import json
 import os
-from src.datascience import logger
-from src.datascience.entity.config_entity import DataIngestionConfig
+from datascience import logger
+from datascience.entity.config_entity import DataIngestionConfig
 
 
 class DataIngestion:

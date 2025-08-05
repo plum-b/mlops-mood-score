@@ -1,8 +1,8 @@
 from pathlib import Path
-from src.datascience.constants import *
-from src.datascience.utils.common import read_yaml, create_directories
+from datascience.constants import *
+from datascience.utils.common import read_yaml, create_directories
 
-from src.datascience.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig)
+from datascience.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig)
 
 class ConfigurationManager:
     def __init__(

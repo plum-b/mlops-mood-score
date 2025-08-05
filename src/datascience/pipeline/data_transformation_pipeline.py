@@ -1,6 +1,6 @@
-from src.datascience.config.configuration import ConfigurationManager
-from src.datascience.components.data_transformation import DataTransformation
-from src.datascience import logger
+from datascience.config.configuration import ConfigurationManager
+from datascience.components.data_transformation import DataTransformation
+from datascience import logger
 
 STAGE_NAME = "Data Transformation Stage"
 

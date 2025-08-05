@@ -3,8 +3,8 @@ import yaml
 import pandas as pd
 from pathlib import Path
 from typing import Dict, List
-from src.datascience import logger
-from src.datascience.entity.config_entity import DataValidationConfig
+from datascience import logger
+from datascience.entity.config_entity import DataValidationConfig
 
 
 class DataValidation:

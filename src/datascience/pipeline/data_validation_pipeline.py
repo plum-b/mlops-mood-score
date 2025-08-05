@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
-from src.datascience import logger
-from src.datascience.config.configuration import ConfigurationManager
-from src.datascience.components.data_validation import DataValidation
+from datascience import logger
+from datascience.config.configuration import ConfigurationManager
+from datascience.components.data_validation import DataValidation
 
 
 class DataValidationTrainingPipeline:

@@ -1,10 +1,10 @@
-# import src.datascience
+# import datascience
 
 # main.py
-from src.datascience import logger
-from src.datascience.pipeline.data_ingestion_pipeline import DataIngestionTrainingPipeline
-from src.datascience.pipeline.data_validation_pipeline import DataValidationTrainingPipeline
-from src.datascience.pipeline.data_transformation_pipeline import DataTransformationTrainingPipeline
+from datascience import logger
+from datascience.pipeline.data_ingestion_pipeline import DataIngestionTrainingPipeline
+from datascience.pipeline.data_validation_pipeline import DataValidationTrainingPipeline
+from datascience.pipeline.data_transformation_pipeline import DataTransformationTrainingPipeline
 
 STAGE_NAME = "Data Ingestion stage"
 VALIDATION_STAGE_NAME = "Data Validation stage"
@@ -13,7 +13,7 @@ TRANSFORMATION_STAGE_NAME = "Data Transformation stage"
 if __name__ == '__main__':
     try:
         # General Message
-        logger.info(f">>>>>> Running the pipeline <<<<<<")
+        logger.info(f">>>>>> Running the pipeline <<<<<<\n\n")
         # Data Ingestion Stage
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         data_ingestion = DataIngestionTrainingPipeline()

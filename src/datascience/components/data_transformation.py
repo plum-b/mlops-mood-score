@@ -3,8 +3,8 @@ import numpy as np
 import os
 from pathlib import Path
 from sklearn.preprocessing import LabelEncoder
-from src.datascience import logger
-from src.datascience.entity.config_entity import DataTransformationConfig
+from datascience import logger
+from datascience.entity.config_entity import DataTransformationConfig
 
 
 class DataTransformation:
