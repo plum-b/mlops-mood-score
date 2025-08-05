@@ -122,6 +122,10 @@ class DataTransformation:
         # Add Technology_Usage_Hours to the drop list
         columns_to_drop = self.config.drop_columns + ["Technology_Usage_Hours"]
         
+        # Also drop all string (object) columns to keep only numeric data
+        string_columns = df.select_dtypes(include=['object']).columns.tolist()
+        columns_to_drop.extend(string_columns)
+        
         dropped_columns = []
         for column in columns_to_drop:
             if column in df.columns:
