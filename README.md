@@ -47,5 +47,5 @@ multi-output regression model, based on user lifestyle inputs such as:
 3. Connect everything in `main.py` and `app.py`
 4. Optionally add Docker, GitHub Actions, and MLflow tracking
 
-🗓️ Author: [Your Name]
+🗓️ Author: Afif El Nahas
 """
